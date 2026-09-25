@@ -1,0 +1,20 @@
+# How Cloudflare should plant the wizard's roots.
+# Keep the name and the URL stays put; rename it and the mushrooms scoot.
+name = "mushroom-wizard"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Who may knock: your GitHub Pages origin (scheme + host, no path),
+# plus localhost for tinkering at home. Comma-separated, no spaces needed.
+ALLOWED_ORIGINS = "https://emiliomio.github.io,http://localhost:8000"
+
+[ai]
+# Workers AI: a key-less gate to Cloudflare's GPU grove.
+binding = "AI"
+
+[[ratelimits]]
+# Ten questions a minute per visitor; plenty for a chat, a nuisance for a bot.
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }

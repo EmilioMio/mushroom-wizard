@@ -1,0 +1,5 @@
+# Things that sprout on your machine and should never be planted in git
+node_modules/
+.wrangler/
+.dev.vars*
+.DS_Store

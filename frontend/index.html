@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mushroom Wizard</title>
+<link rel="icon" href="images/mushroom-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="spores.js"></script>
+<script type="module" src="chat.js"></script>
+</head>
+<body>
+
+<!-- Scenery: the void, the drifting spores, and two clumps of mushrooms peeking in -->
+<div class="bg"></div>
+<canvas id="spore-canvas"></canvas>
+<img class="peeking-mushrooms-left" src="images/mushrooms-left.png" alt="">
+<img class="peeking-mushrooms" src="images/mushrooms-right.png" alt="">
+
+<div class="scene">
+
+  <div class="wizard-side">
+    <img class="wizard-img" src="images/wizard.png" alt="">
+  </div>
+
+  <main class="conversation">
+    <div class="bubbles" id="bubbles">
+      <div class="welcome" id="welcome">
+        <p>You have stumbled upon something ancient.<br>
+        The mycelium stirs. <em>Speak, and it shall answer.</em></p>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="upload-preview" id="upload-preview">
+        <img id="preview-img" alt="">
+        <button class="remove-btn" id="remove-btn" type="button">remove</button>
+      </div>
+      <div class="input-row">
+        <button class="btn-circle" id="upload-btn" type="button" title="Upload image">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <textarea id="user-input" rows="1" placeholder="speak to the wizard..."></textarea>
+        <button class="btn-circle btn-send" id="send-btn" type="button" title="Send">
+          <img src="images/mushroom-icon.png" alt="">
+        </button>
+      </div>
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+  </main>
+
+  <div class="right-side">
+    <img class="right-creature" src="images/flying-mushroom.gif" alt="">
+  </div>
+
+</div>
+
+<div class="ground"></div>
+
+</body>
+</html>

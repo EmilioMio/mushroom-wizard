@@ -1,0 +1,456 @@
+/*
+ * The Wizard's Wardrobe
+ * =====================
+ * Velvet void and fungal glow, pixel folk in a row;
+ * change a hue up in :root and the whole forest wears the suit.
+ */
+
+:root {
+  --void: #0a0a12;
+  --deep: #0f0e1a;
+  --ink: #e8e4f0;
+  --ink-dim: #8a849e;
+  --fungal: #5ebd6e;
+  --fungal-glow: #7deca0;
+  --mycelium: #2d4a32;
+  --bubble-bg: rgba(20, 19, 35, 0.88);
+  --bubble-border: rgba(94, 189, 110, 0.22);
+  --user-bg: rgba(45, 74, 50, 0.30);
+  --user-border: rgba(94, 189, 110, 0.12);
+  --body-font: 'VT323', monospace;
+  --ui-font: 'Silkscreen', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--body-font);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── The Deep Below: three faint glows over a gradient night ── */
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 50% at 18% 80%, rgba(94,189,110,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 35% at 82% 65%, rgba(94,189,110,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 110%, rgba(45,74,50,0.12) 0%, transparent 50%),
+    linear-gradient(180deg, var(--void) 0%, var(--deep) 100%);
+  z-index: 0;
+}
+
+#spore-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── The Peepers: tall mushrooms leaning in from either edge to eavesdrop ── */
+.peeking-mushrooms,
+.peeking-mushrooms-left {
+  position: fixed;
+  width: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 20px rgba(94,189,110,0.15)) brightness(0.9);
+  opacity: 0.7;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.peeking-mushrooms {
+  right: -60px;
+  height: 75vh;
+  transform: scaleX(-1) rotate(10deg);
+}
+
+.peeking-mushrooms-left {
+  left: -40px;
+  height: 70vh;
+  transform: scaleX(-1) rotate(-10deg);
+}
+
+/* ── The Stage: wizard left, words centre, a flying friend right ── */
+.scene {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 600px) 1fr;
+  height: 100vh;
+  position: relative;
+  z-index: 2;
+}
+
+.wizard-side,
+.right-side {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+.wizard-side::after,
+.right-side::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.wizard-side::after {
+  width: 240px;
+  height: 70px;
+  background: radial-gradient(ellipse at center, rgba(94,189,110,0.10) 0%, transparent 70%);
+}
+
+.right-side::after {
+  width: 200px;
+  height: 60px;
+  background: radial-gradient(ellipse at center, rgba(94,189,110,0.07) 0%, transparent 70%);
+}
+
+.wizard-img {
+  width: 250px;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 24px rgba(94,189,110,0.12));
+  position: relative;
+  z-index: 2;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.right-creature {
+  width: 110px;
+  height: auto;
+  bottom: 2.5rem;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 20px rgba(94,189,110,0.10));
+}
+
+/* ── The Conversation: a column of bubbles rising like marsh gas ── */
+.conversation {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bubbles {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 12px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scroll-behavior: smooth;
+}
+
+.bubbles::-webkit-scrollbar { width: 2px; }
+.bubbles::-webkit-scrollbar-track { background: transparent; }
+.bubbles::-webkit-scrollbar-thumb { background: rgba(94,189,110,0.15); border-radius: 1px; }
+
+.bubble {
+  max-width: 85%;
+  padding: 16px 22px;
+  font-size: 22px;
+  line-height: 1.45;
+  position: relative;
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* The wizard's bubble, with a curling tail that points back at its owner */
+.bubble.bot {
+  align-self: flex-start;
+  background: var(--bubble-bg);
+  border: 1px solid var(--bubble-border);
+  border-radius: 24px 24px 24px 4px;
+  backdrop-filter: blur(10px);
+  margin-left: 20px;
+}
+
+.bubble.bot::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  bottom: 6px;
+  width: 24px;
+  height: 20px;
+  background: var(--bubble-bg);
+  border-bottom-left-radius: 20px;
+  border-left: 1px solid var(--bubble-border);
+  border-bottom: 1px solid var(--bubble-border);
+  clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
+}
+
+/* The visitor's bubble, drifting right */
+.bubble.user {
+  align-self: flex-end;
+  background: var(--user-bg);
+  border: 1px solid var(--user-border);
+  border-radius: 24px 24px 4px 24px;
+  backdrop-filter: blur(10px);
+}
+
+.bubble-image {
+  max-width: 180px;
+  max-height: 160px;
+  border-radius: 16px;
+  border: 1px solid rgba(94,189,110,0.12);
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* ── The Waiting Dance: a mushroom bobs while the wizard thinks ── */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+  animation: fade-in 0.4s ease;
+}
+
+.loading-container img {
+  width: 80px;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 16px rgba(94,189,110,0.2));
+  animation: loading-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes loading-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── The Greeting: fades when the first word is spoken ── */
+.welcome {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  transition: opacity 0.4s;
+}
+
+.welcome p {
+  font-size: 23px;
+  color: var(--ink-dim);
+  line-height: 1.5;
+  text-align: center;
+  max-width: 320px;
+}
+
+.welcome em {
+  color: var(--fungal);
+  font-style: normal;
+  opacity: 0.7;
+}
+
+/* ── The Mouth of the Cave: where visitors type and offer photos ── */
+.input-area {
+  padding: 10px 0 22px;
+  flex-shrink: 0;
+}
+
+.upload-preview {
+  display: none;
+  padding: 0 0 8px;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-preview.active { display: flex; }
+
+.upload-preview img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--bubble-border);
+}
+
+.remove-btn {
+  font-family: var(--ui-font);
+  font-size: 13px;
+  color: #cc4444;
+  cursor: pointer;
+  border: none;
+  background: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.remove-btn:hover { opacity: 1; }
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18,17,30,0.55);
+  border: 1px solid rgba(94,189,110,0.10);
+  border-radius: 28px;
+  padding: 6px 8px 6px 18px;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-row:focus-within {
+  border-color: rgba(94,189,110,0.30);
+  box-shadow: 0 0 24px rgba(94,189,110,0.04);
+}
+
+.input-row textarea {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--body-font);
+  font-size: 22px;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  max-height: 100px;
+  line-height: 1.4;
+  padding: 8px 0;
+}
+
+.input-row textarea::placeholder {
+  color: var(--ink-dim);
+  opacity: 0.35;
+}
+
+.btn-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(94,189,110,0.18);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  color: var(--ink-dim);
+}
+
+.btn-circle:hover {
+  border-color: var(--fungal);
+  color: var(--fungal);
+  background: rgba(94,189,110,0.06);
+}
+
+.btn-circle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-send {
+  background: rgba(94,189,110,0.12);
+  border-color: rgba(94,189,110,0.25);
+  color: var(--fungal);
+}
+
+.btn-send:hover { background: rgba(94,189,110,0.22); }
+
+/* While the wizard speaks, the send-mushroom dozes */
+.btn-send:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn-send img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: brightness(0.8);
+}
+
+#file-input { display: none; }
+
+/* ── The Forest Floor: one faint line of light ── */
+.ground {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(94,189,110,0.08) 20%,
+    rgba(94,189,110,0.15) 50%,
+    rgba(94,189,110,0.08) 80%,
+    transparent 100%
+  );
+  z-index: 3;
+}
+
+/* ── Shrinking Spells: the forest folds itself for smaller screens ── */
+@media (max-width: 1000px) {
+  .wizard-img { width: 180px; }
+  .right-creature { width: 160px; }
+  .peeking-mushrooms,
+  .peeking-mushrooms-left { height: 55vh; opacity: 0.5; }
+}
+
+@media (max-width: 700px) {
+  .scene { grid-template-columns: auto 1fr; }
+  .right-side { display: none; }
+  .wizard-side { padding: 0 8px; }
+  .wizard-img { width: 100px; }
+  .peeking-mushrooms,
+  .peeking-mushrooms-left { height: 40vh; opacity: 0.35; }
+  .bubbles { padding: 12px 8px 8px 0; }
+  .bubble { font-size: 18px; padding: 12px 16px; }
+  .input-row textarea { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .scene { grid-template-columns: 1fr; }
+  .wizard-side {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 4px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .wizard-side::after { display: none; }
+  .wizard-img { width: 80px; }
+  .peeking-mushrooms { height: 30vh; opacity: 0.25; right: -30px; }
+  .peeking-mushrooms-left { height: 30vh; opacity: 0.25; left: -30px; }
+  .conversation { padding: 0 6px; }
+  .bubbles { padding: 10px 6px 8px 6px; gap: 12px; }
+  .bubble { max-width: 92%; font-size: 17px; padding: 10px 14px; }
+  .bubble.bot { margin-left: 0; }
+  .input-area { padding: 6px 0 12px; margin-left: 75px; }
+  .input-row { padding: 4px 6px 4px 14px; border-radius: 24px; }
+  .input-row textarea { font-size: 17px; padding: 6px 0; }
+  .btn-circle { width: 36px; height: 36px; }
+  .btn-send img { width: 26px; height: 26px; }
+  .bubble-image { max-width: 140px; max-height: 120px; }
+  .welcome p { font-size: 19px; padding: 0 10px; }
+}
